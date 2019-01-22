@@ -34,13 +34,13 @@ pipeline {
 // at the end of the file or in a shared library
 void executeModuleScripts(String operation) {
  item='applicationName'
-	    String deva='devA'
-	    String devb='devB'
-	    String sita='sitA'
-	    String sitb='sitB'
-	    String uat='uat'
-	    String tt='tt'
-            String prod='prod'
+	    String deva='DevA'
+	    String devb='DevB'
+	    String sita='SitA'
+	    String sitb='SitB'
+	    String uat='UAT'
+	    String tt='TT'
+            String prod='PROD'
 	    def EnvList = []
 	    def inputFile = new File("/home/pegacoeadm/Sample.json")
 	    def InputJSON = new JsonSlurperClassic().parseFile(inputFile, 'UTF-8')
@@ -57,34 +57,39 @@ void executeModuleScripts(String operation) {
 	    println "${devastgs}";
 	    if (devastgs) { 
 	    
-	    	EnvList.add("${devastgs}") 
+	    	//EnvList.add("${devastgs}")
+		EnvList.add("DevA")
 	    	}
 
 	   if (devbstgs) {
-	                   EnvList.add("${devbstgs}")
+	                   //EnvList.add("${devbstgs}")
+			   EnvList.add("DevB")
 
 			      }
 	   if (sitastgs) {
-	                  EnvList.add("${sitastgs}")
-
+	                  //EnvList.add("${sitastgs}")
+                         EnvList.add("SITA")
 			      }
 
 	   if (sitbstgs) {
-	                  EnvList.add("${sitbstgs}")
+	                  //EnvList.add("${sitbstgs}")
+			  EnvList.add("SITB")
 
 			             }
 
 	   if (uatstgs) {
-	                 EnvList.add("${uatstgs}")
+	                 //EnvList.add("${uatstgs}")
+			 EnvList.add("UAT")
 
 			            }
 	   if (ttstgs) {
-	                EnvList.add("${ttstgs}")
+	                EnvList.add("TT")
 
 			           }
 
 	   if (prodstgs) {
-	                EnvList.add("${prodstgs}")
+	                //EnvList.add("${prodstgs}")
+			EnvList.add("PROD")
 
 			           }
 
@@ -100,7 +105,7 @@ void executeModuleScripts(String operation) {
            script {
 
 																								                stage(module) {
-			if (module == 'devA') {
+			if (module == 'DevA') {
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
 						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_export -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
