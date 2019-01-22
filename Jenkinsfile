@@ -101,25 +101,18 @@ void executeModuleScripts(String operation) {
 
 																								                stage(module) {
 			if (module == 'devA') {
-			                           echo 'I only execute on the dev'
+			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
 						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_export -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
-						   junit '**/TestResult.xml'
 						   //junit '**/TestResult.xml'
-						   //junit '**/reports/junit/*.xml'
-						   //junit(allowEmptyResults: true, testResults: "${env.WORKSPACE}/${env.TESTRESULTSFILE}")
-						   //junit(allowEmptyResults: true, testResults: "/var/lib/jenkins/workspace/PDMPipelineOld10_master-5TBLQVUTL4X4U733FUJ5V7I5ZIKD2I3GWOK7AO4NAXUZVC6FFPBQ/*.xml")
 						   script {
 
 						    if (currentBuild.result != null) {
-						     input(message: 'Ready to share tests have failed, would you like to abort the pipeline?')
+						     input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
 						     }
 						     }
 						     }
 						     }
-			                          else {
-			                                  echo 'I execute elsewhere'
-			                                }
 				}
                   }
 	        }
