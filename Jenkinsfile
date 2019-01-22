@@ -109,7 +109,7 @@ void executeModuleScripts(String operation) {
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
 						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_export -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
-						   //junit '**/TestResult.xml'
+						   junit '**/TestResult.xml'
 						   script {
 
 						    if (currentBuild.result != null) {
