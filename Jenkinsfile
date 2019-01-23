@@ -42,7 +42,7 @@ void executeModuleScripts(String operation) {
 	    String tt='TT'
             String prod='PROD'
 	    def EnvList = []
-	    def inputFile = new File("/home/pegacoeadm/Sample.json")
+	    def inputFile = new File("/home/pegacoeadm/test.json")
 	    def InputJSON = new JsonSlurperClassic().parseFile(inputFile, 'UTF-8')
             def stgs,devbstgs,devastgs,sitastgs,sitbstgs,uatstgs,ttstgs,prodstgs
 	    InputJSON.TESTS.each { 
