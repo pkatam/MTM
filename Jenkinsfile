@@ -62,6 +62,7 @@ void executeModuleScripts(String operation) {
 	    if (devastgs) { 
 	    
 	    	//EnvList.add("${devastgs}")
+		devastgs="http://svl-pgwasdb-d1:9101/pdmodevb"
 		EnvList.add("DevA")
 	    	}
 
@@ -110,9 +111,13 @@ void executeModuleScripts(String operation) {
 
 																								                stage(module) {
 			if (module == 'DevA') {
+			String PEGA_DEV_1 = "${devastgs}".split('/')[0] as String
+			String PEGA_DEV_2 = "${devastgs}".split('/')[2] as String
+			String PEGA_DEV = ${PEGA_DEV_1} + ${PEGA_DEV_2}+"pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
+			println "${PEGA_DEV}"
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
-						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_export -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
+						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
 						   junit '**/TestResult.xml'
 						   script {
 

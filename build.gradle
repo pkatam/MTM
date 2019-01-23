@@ -343,10 +343,10 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 		uri = "${uri}?AccessGroup=${java.net.URLEncoder.encode(accessGroup, "UTF-8")}"
 	}
 
-	//username = findProperty('pegaUsername')
-	//password = findProperty('pegaPassword')
-	username = "puneeth_dops"
-	password = "rules"
+	username = findProperty('pegaUsername')
+	password = findProperty('pegaPassword')
+	//username = "puneeth_dops"
+	//password = "rules"
 
 	httpMethod = 'post'
 	contentType = 'text'
