@@ -42,7 +42,8 @@ void executeModuleScripts(String operation) {
 	    String tt='TT'
             String prod='PROD'
 	    def EnvList = []
-	    String AppPath= "/home/pegacoeadm/" + "${env.JOB_NAME}"
+	    String a = "${env.JOB_NAME}".split('/')[0] as String
+	    String AppPath= "/home/pegacoeadm/" + "${a}"
 	    println "$AppPath"
 	    //def inputFile = new File("/home/pegacoeadm/test1.json")
 	    def inputFile = new File("${AppPath}")
