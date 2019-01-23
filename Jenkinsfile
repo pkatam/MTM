@@ -113,7 +113,7 @@ void executeModuleScripts(String operation) {
 			if (module == 'DevA') {
 			String PEGA_DEV_1 = "${devastgs}".split('/')[0] as String
 			String PEGA_DEV_2 = "${devastgs}".split('/')[2] as String
-			String PEGA_DEV = "${PEGA_DEV_1}" + "${PEGA_DEV_2}"+"pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
+			String PEGA_DEV = "${PEGA_DEV_1}"+"//" + "${PEGA_DEV_2}"+"/"+"pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
 			println "${PEGA_DEV}"
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
