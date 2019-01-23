@@ -42,10 +42,13 @@ void executeModuleScripts(String operation) {
 	    String tt='TT'
             String prod='PROD'
 	    def EnvList = []
-	    def inputFile = new File("/home/pegacoeadm/test1.json")
+	    Sting AppPath= "/home/pegacoeadm/ + ${env.JOB_NAME}
+	    println "$AppPath"
+	    //def inputFile = new File("/home/pegacoeadm/test1.json")
+	    def inputFile = new File("$AppPath")
 	    def InputJSON = new JsonSlurperClassic().parseFile(inputFile, 'UTF-8')
             def stgs,devbstgs,devastgs,sitastgs,sitbstgs,uatstgs,ttstgs,prodstgs
-	    InputJSON.TESTS.each { 
+	    InputJSON.AppDetails.each { 
 	    stgs=it."$item";
 	    devbstgs=it."$devb";
 	    devastgs=it."$deva";
