@@ -26,8 +26,8 @@ apply plugin: 'maven-publish'
 apply plugin: "org.tenne.rest"
 apply plugin: "com.jfrog.artifactory"
 
-import com.pega.pw2017.ResultHandler
-import com.pega.pw2017.FileFinder
+//import com.pega.pw2017.ResultHandler
+//import com.pega.pw2017.FileFinder
 import de.undercouch.gradle.tasks.download.Download
 import groovy.util.XmlSlurper
 import groovy.xml.XmlUtil
