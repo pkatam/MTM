@@ -67,7 +67,7 @@ group = artifactorGroup
 version = artifactVersion
 
 def exportFolder = ""
-println "build dir:""${buildDir}"
+println "BuildDir: ${buildDir}"
 //findProperty("exportFolder")?: FileFinder.insureDirectoryExists("${buildDir}/export")
 def importFolder = ""
 //findProperty("importFolder")?: FileFinder.insureDirectoryExists("${buildDir}/import")
