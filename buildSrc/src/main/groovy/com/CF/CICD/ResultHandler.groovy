@@ -4,6 +4,8 @@
 
 package com.CF.CICD
 
+import org.gradle.api.Project
+
 class ResultHandler {
 
     static final String FILE_NAME = "results.properties"
