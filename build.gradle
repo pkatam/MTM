@@ -66,8 +66,10 @@ def importAsyncSetting = findProperty("exportAsyncSetting") ?:defaultImportAsync
 group = artifactorGroup
 version = artifactVersion
 
-def exportFolder = findProperty("exportFolder") ?: FileFinder.insureDirectoryExists("${buildDir}/export")
-def importFolder = findProperty("importFolder") ?: FileFinder.insureDirectoryExists("${buildDir}/import")
+def exportFolder = findProperty("exportFolder") 
+//?: FileFinder.insureDirectoryExists("${buildDir}/export")
+def importFolder = findProperty("importFolder") 
+//?: FileFinder.insureDirectoryExists("${buildDir}/import")
 
 // Define ANT properties for the target defined in prpcServiceUtils
 //ant.properties['export.applicationName'] = applicationName
@@ -92,7 +94,7 @@ println "artifactLocation : ${artifactLocation}"
 println "exportAsyncSetting : ${exportAsyncSetting}"
 println "importAsyncSetting : ${importAsyncSetting}"
 
-publishing {
+/*publishing {
 	publications {
 		main(MavenPublication) {
 			artifact file(FileFinder.findFile(exportFolder, archiveNameWithExt))
@@ -182,17 +184,17 @@ task createRestorePoint(type: org._10ne.gradle.rest.RestTask) {
 			throw new InvalidUserDataException("Must supply '-PtargetURL'")
 		}
 	}
-}
+}*/
 
-task revertToLastRestorePoint(type: org._10ne.gradle.rest.RestTask) {
+/*task revertToLastRestorePoint(type: org._10ne.gradle.rest.RestTask) {
 	group 'Pega'
 	description 'Restore the pega environment to a particular restore point'
 
 	def restorepointName = findProperty('restorePointName') ?: resultHandler.getResult("restorepoint.name")
-	def targetURL = findProperty("targetURL")
-	uri = "${targetURL}/PRRestService/SystemManagement/V2/rollback/${restorepointName}?action=SystemRollback"
+	def targetURL = findProperty("targetURL")*/
+	//uri = "${targetURL}/PRRestService/SystemManagement/V2/rollback/${restorepointName}?action=SystemRollback"
 
-	username = findProperty('pegaUsername')
+	/*username = findProperty('pegaUsername')
 	password = findProperty('pegaPassword')
 
 	httpMethod = 'post'
@@ -215,14 +217,14 @@ task getConflicts(type: org._10ne.gradle.rest.RestTask) {
 	group 'Pega'
 	description 'Check for branch conflict.'
 
-	def branch = findProperty("branch")
-	def targetURL = "http://svl-pgwasdb-d1:9101/pdmodevb"
+	def branch = findProperty("branch")*/
+	//def targetURL = "http://svl-pgwasdb-d1:9101/pdmodevb"
 	//findProperty("targetURL")
 
-	httpMethod = 'get'
-	uri = "${targetURL}/api/v1/branches/${branch}/conflicts"
+	//httpMethod = 'get'
+	//uri = "${targetURL}/api/v1/branches/${branch}/conflicts"
 
-	username = findProperty('pegaUsername')
+	/*username = findProperty('pegaUsername')
 	password = findProperty('pegaPassword')
 
 	contentType = groovyx.net.http.ContentType.JSON
@@ -251,10 +253,10 @@ task merge(type: org._10ne.gradle.rest.RestTask) {
 	def targetURL = findProperty('targetURL')
 	def mergePolicy = 'Highest'  //Alternative is to set it to New to create new ruleset versions on each merge
 
-	httpMethod = 'post'
-	uri = "${targetURL}/api/v1/branches/${branch}/merge?mergePolicy=${mergePolicy}"
+	httpMethod = 'post'*/
+	//uri = "${targetURL}/api/v1/branches/${branch}/merge?mergePolicy=${mergePolicy}"
 
-	username = findProperty('pegaUsername')
+	/*username = findProperty('pegaUsername')
 	password = findProperty('pegaPassword')
 	
 	requestBody = [pxObjClass: 'Pega-API-CI-Branch',
@@ -311,7 +313,7 @@ task getMergeStatus(type: org._10ne.gradle.rest.RestTask) {
 			throw new InvalidUserDataException("Must supply '-PtargetURL'")
 		}
 	}
-}
+}*/
 
 task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 	group 'Pega'
