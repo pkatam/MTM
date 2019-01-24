@@ -26,8 +26,8 @@ apply plugin: 'maven-publish'
 apply plugin: "org.tenne.rest"
 apply plugin: "com.jfrog.artifactory"
 
-//import com.pega.pw2017.ResultHandler
-//import com.pega.pw2017.FileFinder
+import com.pega.pw2017.ResultHandler
+import com.pega.pw2017.FileFinder
 import de.undercouch.gradle.tasks.download.Download
 import groovy.util.XmlSlurper
 import groovy.xml.XmlUtil
@@ -37,9 +37,9 @@ import static groovyx.net.http.ContentType.XML
 // Import the ANT targets defined in prpcServiceUtils for application import and export
 ant.importBuild 'prpcServiceUtils/scripts/utils/prpcServiceUtilsWrapper.xml'
 
-//ext {
-//	resultHandler = new ResultHandler(project)
-//}
+ext {
+	resultHandler = new ResultHandler(project)
+}
 
 // Define properties to be used later in later tasks
 def buildNumber = findProperty("buildNumber") ?:System.env.BUILD_NUMBER
