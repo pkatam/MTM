@@ -1,0 +1,372 @@
+/* 
+* Copyright (c) 2017 and Confidential to Pegasystems Inc. All rights reserved.  
+*/ 
+
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+		// maven {
+		// 	url "${System.env.ARTIFACTORY_URL}/repo"
+		// }
+	}
+	dependencies {
+		classpath "org._10ne.gradle:rest-gradle-plugin:0.4.2"
+		classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.1.1"
+	}
+}
+
+plugins {
+	id "de.undercouch.download" version "3.2.0"
+}
+
+apply plugin: "base"
+apply plugin: 'maven-publish'
+apply plugin: "org.tenne.rest"
+apply plugin: "com.jfrog.artifactory"
+
+//import com.pega.pw2017.ResultHandler
+//import com.pega.pw2017.FileFinder
+import de.undercouch.gradle.tasks.download.Download
+import groovy.util.XmlSlurper
+import groovy.xml.XmlUtil
+import groovy.io.FileType
+import java.io.File
+import static groovyx.net.http.ContentType.XML
+// Import the ANT targets defined in prpcServiceUtils for application import and export
+ant.importBuild 'prpcServiceUtils/scripts/utils/prpcServiceUtilsWrapper.xml'
+
+//ext {
+//	resultHandler = new ResultHandler(project)
+//}
+
+// Define properties to be used later in later tasks
+def buildNumber = findProperty("buildNumber") ?:System.env.BUILD_NUMBER
+def applicationName = "DevOps"
+//findProperty("applicationName") ?:defaultApplicationName
+def applicationVersion = "01.01.03"
+
+//findProperty("applicationVersion") ?:defaultApplicationVersion
+def artifactVersion = findProperty("artifactVersion") ?:applicationVersion + '_' + buildNumber
+def artifactoryURL = findProperty("artifactoryURL") ?:System.env.ARTIFACTORY_URL
+def artifactorGroup = findProperty("artifactoryGroup") ?:defaultArtifactoryGroup
+def artifactoryRepoKey = "Pega_PDM"
+//findProperty("artifactoryRepoKey") ?:defaultArtifactoryRepoKey
+def archiveName = "${applicationName}_${applicationVersion}"
+def archiveNameWithExt = "${archiveName}.zip"
+//def artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/${artifactoryRepoKey}/${artifactorGroup}/${applicationName}/${artifactVersion}/${applicationName}-${applicationVersion}_${buildNumber}.zip"
+def artifactLocation="http://svl-jbuild-d1:8091/artifactory/Pega_PDM/product/DevOps_Export_01-01-01/ExportWizard/TestToday.zip"
+//def artifactLocation = "http://svl-jbuild-d1:8091/artifactory/Pega_PDM/branch/TestDevOps4/ExportWizard/TestDevOps4_20180925T004514_GMT.jar"
+//replace https with http since the download location does not require sign in
+artifactLocation = artifactLocation.replaceAll(/^https\:/, 'http:')
+def exportAsyncSetting = findProperty("exportAsyncSetting") ?:defaultExportAsyncSetting
+def importAsyncSetting = findProperty("exportAsyncSetting") ?:defaultImportAsyncSetting
+
+group = artifactorGroup
+version = artifactVersion
+
+def exportFolder = findProperty("exportFolder") 
+//?: FileFinder.insureDirectoryExists("${buildDir}/export")
+def importFolder = findProperty("importFolder") 
+//?: FileFinder.insureDirectoryExists("${buildDir}/import")
+
+// Define ANT properties for the target defined in prpcServiceUtils
+//ant.properties['export.applicationName'] = applicationName
+//ant.properties['export.applicationVersion'] = applicationVersion
+//ant.properties['export.archiveName'] = archiveNameWithExt
+ant.properties['service.responseartifacts.dir'] = exportFolder
+ant.properties['export.async']=exportAsyncSetting
+ant.properties['import.async']=importAsyncSetting
+ant.properties['import.archive.path']=importFolder
+
+
+println "\nBuildNumber : ${buildNumber}"
+println "applicationName : ${applicationName}"
+println "applicationVersion : ${applicationVersion}"
+println "artifactVersion : ${artifactVersion}"
+println "artifactoryURL : ${artifactoryURL}"
+println "artifactorGroup : ${artifactorGroup}"
+println "artifactoryRepoKey : ${artifactoryRepoKey}"
+println "archiveName : ${archiveName}"
+println "archiveNameWithExt : ${archiveNameWithExt}"
+println "artifactLocation : ${artifactLocation}"
+println "exportAsyncSetting : ${exportAsyncSetting}"
+println "importAsyncSetting : ${importAsyncSetting}"
+
+/*publishing {
+	publications {
+		main(MavenPublication) {
+			artifact file(FileFinder.findFile(exportFolder, archiveNameWithExt))
+		}
+	}
+}
+
+artifactory {
+	contextUrl = artifactoryURL
+	publish {
+		repository {
+			repoKey = "Pega_PDM"
+			username = artifactoryUser
+			password = artifactoryPassword
+
+			mavenCompatible = false
+		}
+		defaults {
+			publications ('main')
+		}
+		publishBuildInfo = true
+		publishArtifacts = true
+	}
+}
+
+task fetchFromArtifactory(type: Download) {
+	group 'Pega'
+	description 'Fetch application archive from artifactory'
+
+
+	// fetch all files in this folder
+	println "Bence: current files in importfolder:"
+	def list = []
+	def dir = new File(importFolder)
+	dir.eachFileRecurse (FileType.FILES) {
+		file ->
+	  	list << file
+	}
+	// print all files in folder
+	list.each {
+  	println it.path
+	}
+	
+	doFirst {
+		println 'First clean out import folder on the Jenkins system' +importFolder
+	  File folder = new File(importFolder)
+		folder.eachFileRecurse(FileType.FILES) {
+	    file ->
+	        file.delete()
+		}
+	}
+
+	println 'Downloading artifact from : ' + artifactLocation
+	src artifactLocation
+	username artifactoryUser
+	password artifactoryPassword
+	dest importFolder
+
+}
+
+
+
+
+task createRestorePoint(type: org._10ne.gradle.rest.RestTask) {
+	group 'Pega'
+	description 'Create restore point.'
+
+	def targetURL = findProperty("targetURL")
+	uri = "${targetURL}/PRRestService/SystemManagement/V2/RestorePoint"
+
+	username = findProperty('pegaUsername')
+	password = findProperty('pegaPassword')
+
+	httpMethod = 'post'
+	contentType = groovyx.net.http.ContentType.JSON
+	responseHandler = { response ->
+		def restorepointName = response.pxRestorePoints[0].pxRestorePointName
+
+		resultHandler.putResult("restorepoint.name", restorepointName)
+		println "Success: ${response.toString()}"
+		println "\nRestore point for ${targetURL} generated :  ${restorepointName}"
+	}
+
+	doFirst {
+		// Validate project properties
+		if (!project.hasProperty('targetURL')) {
+			throw new InvalidUserDataException("Must supply '-PtargetURL'")
+		}
+	}
+}*/
+
+/*task revertToLastRestorePoint(type: org._10ne.gradle.rest.RestTask) {
+	group 'Pega'
+	description 'Restore the pega environment to a particular restore point'
+
+	def restorepointName = findProperty('restorePointName') ?: resultHandler.getResult("restorepoint.name")
+	def targetURL = findProperty("targetURL")*/
+	//uri = "${targetURL}/PRRestService/SystemManagement/V2/rollback/${restorepointName}?action=SystemRollback"
+
+	/*username = findProperty('pegaUsername')
+	password = findProperty('pegaPassword')
+
+	httpMethod = 'post'
+	contentType = groovyx.net.http.ContentType.JSON
+
+	responseHandler = { response ->
+		println "Success: ${response.toString()}"
+		println  "\nRestored system ${targetURL} to the restore point : ${restorePoint}"
+	}
+
+	doFirst {
+		// Validate project properties
+		if (!project.hasProperty('targetURL')) {
+			throw new InvalidUserDataException("Must supply '-PtargetURL'")
+		}
+	}
+}
+
+task getConflicts(type: org._10ne.gradle.rest.RestTask) {
+	group 'Pega'
+	description 'Check for branch conflict.'
+
+	def branch = findProperty("branch")*/
+	//def targetURL = "http://svl-pgwasdb-d1:9101/pdmodevb"
+	//findProperty("targetURL")
+
+	//httpMethod = 'get'
+	//uri = "${targetURL}/api/v1/branches/${branch}/conflicts"
+
+	/*username = findProperty('pegaUsername')
+	password = findProperty('pegaPassword')
+
+	contentType = groovyx.net.http.ContentType.JSON
+	responseHandler = { response ->
+		if (response.conflictsCount as int == 0) {
+			println "No conflicts!"
+			} else {
+				println "Conflicts found: ${response.conflicts}"
+				throw new BuildCancelledException("Found '${response.conflictsCount}' conflicts.")
+			}
+		}
+
+		doFirst {
+		// Validate project properties
+		if (!project.hasProperty("branch") || !project.hasProperty('targetURL')) {
+			throw new InvalidUserDataException("Must supply '-Pbranch' and '-PtargetURL'")
+		}
+	}
+}
+
+task merge(type: org._10ne.gradle.rest.RestTask) {
+	group 'Pega'
+	description 'Merge a branch.'
+
+	def branch = findProperty('branch')
+	def targetURL = findProperty('targetURL')
+	def mergePolicy = 'Highest'  //Alternative is to set it to New to create new ruleset versions on each merge
+
+	httpMethod = 'post'*/
+	//uri = "${targetURL}/api/v1/branches/${branch}/merge?mergePolicy=${mergePolicy}"
+
+	/*username = findProperty('pegaUsername')
+	password = findProperty('pegaPassword')
+	
+	requestBody = [pxObjClass: 'Pega-API-CI-Branch',
+  				   pxRulesetPassword: 'devops']
+
+	contentType = groovyx.net.http.ContentType.JSON
+	responseHandler = { response ->
+		resultHandler.putResult("merge.id", response.ID)
+		println "Merge Response Queue ID : $response.ID"
+	}
+
+	doFirst {
+		// Validate project properties
+		if (!project.hasProperty("branch") || !project.hasProperty('targetURL')) {
+			throw new InvalidUserDataException("Must supply '-Pbranch' and '-PtargetURL'")
+		}
+	}
+}
+
+task getMergeStatus(type: org._10ne.gradle.rest.RestTask) {
+	group 'Pega'
+	description 'Check merge status.'
+
+	def mergeId = resultHandler.getResult("merge.id") ?: ""
+	def targetURL = findProperty("targetURL")
+
+	httpMethod = 'get'
+	uri = "${targetURL}/api/v1/merges/${java.net.URLEncoder.encode(mergeId, "UTF-8")}"
+
+	username = findProperty('pegaUsername')
+	password = findProperty('pegaPassword')
+
+	contentType = groovyx.net.http.ContentType.JSON
+	responseHandler = { response ->
+		resultHandler.putResult("merge.status", response.statusMessage)
+		if(response.statusMessage.equals("Processing")){
+			//Merge still Processing
+			throw new BuildCancelledException("The merge status for '${mergeId}' is still '${response.statusMessage}'.")
+			} else if (response.statusMessage.equals("Success")){
+			//Merge Succesful
+			println "Merge is complete for '${mergeId}', Status Message: '${response.statusMessage}'"
+			} else {
+			//Possible Conflicts?
+			println "Error while performing merge for: '${mergeId}'"
+			println "Errors: '${response.errors}'"
+
+			throw new BuildCancelledException("Error while merging for '${mergeId}' '${response.statusMessage}' '${response.errors}'")
+		}
+	}
+
+	doFirst {
+		// Validate project properties
+		if (!project.hasProperty('targetURL')) {
+			throw new InvalidUserDataException("Must supply '-PtargetURL'")
+		}
+	}
+}*/
+
+task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
+	group 'Pega'
+	description 'Execute PegaUnit tests'
+
+	def targetURL = findProperty('targetURL')
+	def accessGroup = findProperty('accessGroup') ?:project.defaultAccessGroup
+	def testSuite = findProperty('testSuite') ? '':project.smokeTestSuite
+	def testResultLocation = findProperty('testResultLocation') ?:System.getProperty("user.dir")
+	//testResultLocation = "/var/lib/jenkins/workspace/PDMPipelineOld10_master-5TBLQVUTL4X4U733FUJ5V7I5ZIKD2I3GWOK7AO4NAXUZVC6FFPBQ"
+	def testResultFile = findProperty('testResultFile') ?:project.testResultFile
+	File testResultFileHandle
+	if (testResultLocation != null) {
+		testResultFileHandle = new File("${testResultLocation}/${testResultFile}")
+	}
+	else {
+		testResultFileHandle = new File("${testResultFile}")	
+	}
+	//create the file
+	testResultFileHandle.createNewFile()
+
+    println "\nTest result file location - ${testResultFileHandle.absolutePath}"
+        accessGroup = "PINCIM_PDM_PegaScrum:Administrators"
+	uri = "http://svl-pgwasdb-d1:9101/pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
+	//?TestSuiteID=${java.net.URLEncoder.encode(testSuite, "UTF-8")}"
+	
+	// Add the access group if it is specified
+	if (accessGroup != null) {
+		uri = "${uri}?AccessGroup=${java.net.URLEncoder.encode(accessGroup, "UTF-8")}"
+	}
+
+	username = findProperty('pegaUsername')
+	password = findProperty('pegaPassword')
+	//username = "puneeth_dops"
+	//password = "rules"
+
+	httpMethod = 'post'
+	contentType = 'text'
+
+	responseHandler = { response ->
+		println "Successful test execution. Results are stored at : ${testResultFile.toString()} \n"
+		if (response != null) {
+			println "Test Results : ${response.toString()}"
+		}
+		//testResultFileHandle.write "${response.toString()}"
+                    testResultFileHandle.write("${response}", "UTF-8")
+		
+		}
+
+	doFirst {
+		// Validate project properties
+		if (!project.hasProperty('targetURL')) {
+			throw new InvalidUserDataException("Must supply '-PtargetURL'")
+		}
+	}
+}
