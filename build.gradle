@@ -155,7 +155,7 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
         httpMethod = 'post'
 	contentType = 'text'
 	responseHandler = { response ->
-	println "Tests result status submitted
+	println "Tests result status submitted"
         }  
 
 
