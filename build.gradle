@@ -151,12 +151,12 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
                     testResultFileHandle.write("${response}", "UTF-8")
 		
 		}
-	uri = "http://svl-pgwasda-d1:9084/paddeva/PRRestService/CICDRestServices/build/build?appname=abcd&appversion=1&buildno=112&startdate=06/23/2018&enddate=06/23/2018&currentstatus=Passed&utloc=test&nextbuildno=2&stagename=UT"
-        httpMethod = 'post'
+	///uri = "http://svl-pgwasda-d1:9084/paddeva/PRRestService/CICDRestServices/build/build?appname=abcd&appversion=1&buildno=112&startdate=06/23/2018&enddate=06/23/2018&currentstatus=Passed&utloc=test&nextbuildno=2&stagename=UT"
+        /*httpMethod = 'post'
 	contentType = 'text'
 	responseHandler = { response ->
 	println "Tests result status submitted"
-        }  
+        } */ 
 
 
 	doFirst {
