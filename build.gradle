@@ -115,7 +115,6 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 	def message = '[{"action": "ADD","amenitySkey": "74","userId": "puneet","userName": "Puneeth katam","userRole": "puneet","userComment": "Test321123","availableIndc": "Y"}]'
 																																    post.setRequestMethod("POST")
 																																    post.setDoOutput(true)
-								    post.setRequestProperty( "Authorization", "Basic ${authString}" )										                                		    post.setRequestProperty("Content-Type", "application/json")
 										 																					    post.getOutputStream().write(message.getBytes("UTF-8"));
 																																    def postRC = post.getResponseCode();
 																																    println(postRC);
