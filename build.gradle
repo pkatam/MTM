@@ -109,7 +109,7 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 	group 'Pega'
 	description 'Execute PegaUnit tests'
 	def post = new URL("http://dummy.restapiexample.com/api/v1/create/").openConnection();
-	def message = '{"message":"this is a message"}'
+	def message = '{"name":"test","salary":"123","age":"23","id":"719"}'
 	post.setRequestMethod("POST")
 	post.setDoOutput(true)
 	post.setRequestProperty("Content-Type", "application/json")
