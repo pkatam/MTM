@@ -109,13 +109,12 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 	group 'Pega'
 	description 'Execute PegaUnit tests'
         def authString = "situser_dt:dajsgiuewhj123".getBytes().encodeBase64().toString()
-	def post = new URL("https://sitb.gwservices.carefirst.com/rest/pdm/prm/v1/1961534/amenities").openConnection();
-	//post.setRequestProperty( "Authorization", "Basic ${authString}" )
+	def post = new URL("https://sitb.gwservices.carefirst.com/rest/pdm/prm/v1/1961534/amenities").openConnection()
 	def message = '[{"action": "ADD","amenitySkey": "74","userId": "puneet","userName": "Puneeth katam","userRole": "puneet","userComment": "Test321123","availableIndc": "Y"}]'
 																																    post.setRequestMethod("POST")
 																																    post.setDoOutput(true)
-								post.setRequestProperty( "Authorization", "Basic ${authString}" )																							    post.setRequestProperty("Content-Type", "application/json")
-																																    post.getOutputStream().write(message.getBytes("UTF-8"));
+								    //post.setRequestProperty( "Authorization", "Basic ${authString}" )										                                		    post.setRequestProperty("Content-Type", "application/json")
+										 																					    post.getOutputStream().write(message.getBytes("UTF-8"));
 																																    def postRC = post.getResponseCode();
 																																    println(postRC);
 																																    if(postRC.equals(200)) {
