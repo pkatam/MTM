@@ -112,7 +112,8 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 	String pwd='dajsgiuewhj123'
 	def authString  = "${usr}:${pwd}".getBytes().encodeBase64().toString()
 	def post = new URL("http://dummy.restapiexample.com/api/v1/create").openConnection();
-	def message = '{"name":"test","salary":"123","age":"23"}' 																    post.setRequestMethod("POST")																				    post.setDoOutput(true)
+	def message = '{"name":"test"}'
+	post.setRequestMethod("POST")																				    post.setDoOutput(true)
     post.setRequestProperty("Content-Type", "application/json")								 														    post.getOutputStream().write(message.getBytes("UTF-8"));
 																								   def postRC = post.getResponseCode();
 																								    println(postRC);
