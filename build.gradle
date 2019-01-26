@@ -94,7 +94,7 @@ println "archiveNameWithExt : ${archiveNameWithExt}"
 println "artifactLocation : ${artifactLocation}"
 println "exportAsyncSetting : ${exportAsyncSetting}"
 println "importAsyncSetting : ${importAsyncSetting}"
-
+println "status: ${buildStatus} hello ${buildResult}" 
 publishing {
 	publications {
 		main(MavenPublication) {
@@ -165,8 +165,9 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 }
 
 task sendUpdateToPega(type: org._10ne.gradle.rest.RestTask, dependsOn: 'executePegaUnitTests') {
-
-	uri = "http://svl-pgwasda-d1:9084/paddeva/PRRestService/CICDRestServices/build/build?appname=abcd&appversion=1&buildno=${buildNumber}&startdate=06/23/2018&enddate=06/23/2018&currentstatus=Passed&utloc=test&nextbuildno=2&stagename=UT"
+        appname = findProperty('pegaAppName)
+	appversion = findProperty('pegaAppVersion')
+	uri = "http://svl-pgwasda-d1:9084/paddeva/PRRestService/CICDRestServices/build/build?appname=${appname}&appversion=${appversion}&buildno=${buildNumber}&startdate=06/23/2018&enddate=06/23/2018&currentstatus=Passed&utloc=test&nextbuildno=2&stagename=UT"
 
 	httpMethod = 'post'
         contentType = 'TEXT'

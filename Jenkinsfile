@@ -41,6 +41,8 @@ void executeModuleScripts(String operation) {
 	    String uat='UAT'
 	    String tt='TT'
             String prod='PROD'
+	    String AppName='applicationName'
+	    String AppVersion='applicationVersion'
 	    def EnvList = []
 	    String a = "${env.JOB_NAME}".split('/')[0] as String
 	    String AppPath= "/home/pegacoeadm/" + "${a}"+".json"
@@ -48,7 +50,7 @@ void executeModuleScripts(String operation) {
 	    //def inputFile = new File("/home/pegacoeadm/test1.json")
 	    def inputFile = new File("${AppPath}")
 	    def InputJSON = new JsonSlurperClassic().parseFile(inputFile, 'UTF-8')
-            def stgs,devbstgs,devastgs,sitastgs,sitbstgs,uatstgs,ttstgs,prodstgs
+            def appname,appversion,stgs,devbstgs,devastgs,sitastgs,sitbstgs,uatstgs,ttstgs,prodstgs
 	    InputJSON.AppDetails.each { 
 	    stgs=it."$item";
 	    devbstgs=it."$devb";
@@ -58,6 +60,8 @@ void executeModuleScripts(String operation) {
 	    uatstgs=it."$uat";
             ttstgs=it."$tt";
 	    prodstgs=it."$prod";
+            appname=it."$AppName";
+	    appversion=it."$AppVersion";
 	    println "${devastgs}";
 	    if (devastgs) { 
 	    
@@ -118,7 +122,7 @@ void executeModuleScripts(String operation) {
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
 						   //sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
-						   sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
+						   sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
 						   junit '**/TestResult.xml'
 						   script {
 
