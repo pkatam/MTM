@@ -170,3 +170,22 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 		}
 	}
 }
+
+task sendUpdateToPega(type: org._10ne.gradle.rest.RestTask, dependsOn: 'executePegaUnitTests') {
+
+	uri = "http://svl-pgwasda-d1:9084/paddeva/PRRestService/CICDRestServices/build/build?appname=abcd&appversion=1&buildno=112&startdate=06/23/2018&enddate=06/23/2018&currentstatus=Passed&utloc=test&nextbuildno=2&stagename=UT"
+
+	httpMethod = 'post'
+        contentType = 'TEXT'
+        responseHandler = { response ->
+	println "call 1\n"
+	if (response != null) {
+	println "suceess"
+	           }
+        }
+
+
+
+
+
+}
