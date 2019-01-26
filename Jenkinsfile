@@ -134,7 +134,7 @@ void executeModuleScripts(String operation) {
 						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
 						     println "${userInput}"
 						     currentBuild.result = 'SUCCESS'
-						     buildStatus='SUCCESS - UT failures Approved by Admin'
+						     buildStatus="SUCCESS, UT failures Approved by Admin"
 						     sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus}"
 						     echo "Took ${currentBuild.startTimeInMillis}"
 						     }catch(err) { // input false
