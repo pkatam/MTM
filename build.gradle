@@ -164,10 +164,10 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 }
 
 task sendUpdateToPega(type: org._10ne.gradle.rest.RestTask) {
-        appname = findProperty('pegaAppName')
-	appversion = findProperty('pegaAppVersion')
-	buildStatus = findProperty('buildStatus')
-	testres = "${testResultFile.toString()}"
+        def appname = findProperty('pegaAppName')
+	def appversion = findProperty('pegaAppVersion')
+	def buildStatus = findProperty('buildStatus')
+	def testres = "${testResultFile.toString()}"
 	uri = "http://svl-pgwasda-d1:9084/paddeva/PRRestService/CICDRestServices/build/build?appname=${appname}&appversion=${appversion}&buildno=${buildNumber}&startdate=06/23/2018&enddate=06/23/2018&currentstatus=${buildStatus}&utloc=${testres}&nextbuildno=2&stagename=UT"
 
 	httpMethod = 'post'
