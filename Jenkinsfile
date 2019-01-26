@@ -136,7 +136,7 @@ void executeModuleScripts(String operation) {
 						     currentBuild.result = 'SUCCESS'
 						     buildStatus='SUCCESS - UT failures Approved by Admin'
 						     sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus}"
-						     echo "Took ${Util.getTimeSpanString(System.currentTimeMillis() - currentBuild.startTimeInMillis)}"
+						     echo "Took ${currentBuild.startTimeInMillis)}"
 						     }catch(err) { // input false
 						         echo "This Job has been Aborted"
                                                          currentBuild.result = 'UNSTABLE'
