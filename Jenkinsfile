@@ -129,7 +129,8 @@ void executeModuleScripts(String operation) {
 						   script {
 
 						    if (currentBuild.result != null) {
-						     input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
+						     def userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
+						     println "${userInput}"
 						     }
 						     }
 						     }
