@@ -122,7 +122,8 @@ void executeModuleScripts(String operation) {
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
 						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
-						   String buildStatus = currentBuild.result
+						   String buildStatus = currentBuild.currentResult
+						   println "${buildStatus}"
 						   sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus}"
 						   junit '**/TestResult.xml'
 						   script {
