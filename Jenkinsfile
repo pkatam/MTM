@@ -127,10 +127,17 @@ void executeModuleScripts(String operation) {
 						   sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus}"
 						   junit '**/TestResult.xml'
 						   script {
-
+							def userInput
 						    if (currentBuild.result != null) {
-						     def userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
+                                                    try{
+						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
 						     println "${userInput}"
+						     }catch(err) { // input false
+						         echo "This Job has been Aborted"
+							 currentBuild.currentresult = 'Aborted'
+							 buildStatus = currentBuild.currentResult
+							 sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus}"
+							 }
 						     }
 						     }
 						     }
