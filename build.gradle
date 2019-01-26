@@ -155,6 +155,9 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 			
 	doFirst {
 		// Validate project properties
+		for(Map.Entry p: project.getProperties()) {
+		            println p;
+			            }
 		if (!project.hasProperty('targetURL')) {
 			throw new InvalidUserDataException("Must supply '-PtargetURL'")
 		}
