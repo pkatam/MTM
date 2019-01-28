@@ -129,7 +129,7 @@ void executeModuleScripts(String operation) {
 						   junit '**/TestResult.xml'
 						   script {
 							def userInput
-							echo "${currentBuild.durationString}"
+							echo "uuernt duration puneeth: ${currentBuild.durationString}"
 						    if (currentBuild.result != null) {
                                                     try{
 						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=waiting"
