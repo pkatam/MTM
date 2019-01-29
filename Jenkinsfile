@@ -123,7 +123,7 @@ void executeModuleScripts(String operation) {
 			String PEGA_DEV_2 = "${devastgs}".split('/')[2] as String
 			String PEGA_DEV = "${PEGA_DEV_1}"+"//" + "${PEGA_DEV_2}"+"/"+"pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
 			println "${PEGA_DEV}"
-			 sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Started' -PDateFlag=Start -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion}"
+			 sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Started' -PDateFlag=Start -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DevA%20Started'"
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
 						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
@@ -135,18 +135,18 @@ void executeModuleScripts(String operation) {
 							echo "uuernt duration puneeth: ${currentBuild.durationString}"
 						    if (currentBuild.result != null) {
                                                     try{
-						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=waiting"
+						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus='Waiting%20for%20Admin%20Approval' -PStageName='Unit%20Testing'"
 						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
 						     println "${userInput}"
 						     currentBuild.result = "SUCCESS"
-						     buildStatus = "SUCCESS,Approved"
-						     sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus}"
+						     buildStatus = "SUCCESS%20UAT%20Failures%20Approved"
+						     sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus} -PStageName='Unit%20Testing'"
 						     println "Took ${currentBuild.startTimeInMillis}"
 						     }catch(err) { // input false
 						         echo "This Job has been Aborted"
                                                          currentBuild.result = 'UNSTABLE'
 							 buildStatus = 'Aborted'
-							 sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus}"
+							 sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus} -PStageName='Unit%20Testing'"
 							 }
 						     }
 						     }
@@ -156,7 +156,7 @@ void executeModuleScripts(String operation) {
 				}
                   }
 	        }
-		sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Ended' -PDateFlag=End"
+		sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Ended' -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
 		
 				
 }	
