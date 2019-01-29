@@ -118,11 +118,12 @@ void executeModuleScripts(String operation) {
 			if (module == 'DevA') {
 
 			//Start of first Stage of pipeline.
-			sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Started' -PDateFlag=Start"
+			sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Started' -PDateFlag=Start -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion}"
 			String PEGA_DEV_1 = "${devastgs}".split('/')[0] as String
 			String PEGA_DEV_2 = "${devastgs}".split('/')[2] as String
 			String PEGA_DEV = "${PEGA_DEV_1}"+"//" + "${PEGA_DEV_2}"+"/"+"pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
 			println "${PEGA_DEV}"
+			 sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Started' -PDateFlag=Start -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion}"
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
 						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
