@@ -116,6 +116,9 @@ void executeModuleScripts(String operation) {
 
 																								                stage(module) {
 			if (module == 'DevA') {
+
+			//Start of first Stage of pipeline.
+			sh "./gradlew sendUpdateToPega -PbuildStatus='Dev Stage Started' -PDateFlag=Start"
 			String PEGA_DEV_1 = "${devastgs}".split('/')[0] as String
 			String PEGA_DEV_2 = "${devastgs}".split('/')[2] as String
 			String PEGA_DEV = "${PEGA_DEV_1}"+"//" + "${PEGA_DEV_2}"+"/"+"pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
@@ -125,7 +128,6 @@ void executeModuleScripts(String operation) {
 						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE}"
 						   String buildStatus = currentBuild.currentResult
 						   println "${buildStatus}"
-						   //sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus}"
 						   junit '**/TestResult.xml'
 						   script {
 							def userInput
@@ -148,10 +150,13 @@ void executeModuleScripts(String operation) {
 						     }
 						     }
 						     }
+
 						     }
 				}
                   }
 	        }
+		sh "./gradlew sendUpdateToPega -PbuildStatus='Dev Stage Started' -PDateFlag=End"
+		
 				
 }	
 
