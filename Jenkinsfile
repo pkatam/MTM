@@ -118,7 +118,7 @@ void executeModuleScripts(String operation) {
 			if (module == 'DevA') {
 
 			//Start of first Stage of pipeline.
-			sh "./gradlew sendUpdateToPega -PbuildStatus='Dev Stage Started' -PDateFlag=Start"
+			sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Started' -PDateFlag=Start"
 			String PEGA_DEV_1 = "${devastgs}".split('/')[0] as String
 			String PEGA_DEV_2 = "${devastgs}".split('/')[2] as String
 			String PEGA_DEV = "${PEGA_DEV_1}"+"//" + "${PEGA_DEV_2}"+"/"+"pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
@@ -155,7 +155,7 @@ void executeModuleScripts(String operation) {
 				}
                   }
 	        }
-		sh "./gradlew sendUpdateToPega -PbuildStatus='Dev Stage Started' -PDateFlag=End"
+		sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Ended' -PDateFlag=End"
 		
 				
 }	
