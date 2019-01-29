@@ -172,6 +172,8 @@ task sendUpdateToPega(type: org._10ne.gradle.rest.RestTask) {
 	def stagename = findProperty('StageName')
 	def startdate = findProperty('StartDate')
 	def enddate = findProperty('EndDate')
+	startdate='01/29/2019'
+	enddate='01/29/2019'
 	uri = "http://svl-pgwasda-d1:9084/paddeva/PRRestService/CICDRestServices/build/build?appname=${appname}&appversion=${appversion}&buildno=${buildNumber}&startdate=${startdate}&enddate=${enddate}&currentstatus=${buildStatus}&utloc=${testres}&nextbuildno=2&stagename=${stagename}&DateFlag=${dateflag}"
         println "${uri}"
 	httpMethod = 'post'
