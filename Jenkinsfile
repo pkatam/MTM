@@ -149,6 +149,12 @@ void executeModuleScripts(String operation) {
 							 sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus} -PStageName='Unit%20Testing'"
 							 }
 						     }
+						      else{
+
+						                      sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Ended' -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
+
+								                      }
+
 						     }
 						     }
 
@@ -156,8 +162,5 @@ void executeModuleScripts(String operation) {
 				}
                   }
 	        }
-		sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Ended' -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
-		
-				
 }	
 
