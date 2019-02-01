@@ -131,7 +131,7 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
         println "uri = ${uri}"	
 	// Add the access group if it is specified
 	if (accessGroup != null) {
-		uri = "${uri}?AccessGroup=${java.net.URLEncoder.encode(accessGroup, "UTF-8")}"
+		uri = "${uri}&AccessGroup=${java.net.URLEncoder.encode(accessGroup, "UTF-8")}"
 	}
 
 	username = findProperty('pegaUsername')
