@@ -124,15 +124,14 @@ task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 	testResultFileHandle.createNewFile()
 
     println "\nTest result file location - ${testResultFileHandle.absolutePath}"
-    testSuite= "TS_Sanctions"
+    testSuite= "CAREFIRST-PROVIDER-PINCIM-WORK-SANCTIONS!TS_SANCTIONS"
         accessGroup = "PINCIM_PDM_PegaScrum:Administrators"
 	//accessGroup = "PINCIM:Administrators"
-	uri = "http://svl-pgwasdb-d1:9101/pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
-	//?TestSuiteID=${java.net.URLEncoder.encode(testSuite, "UTF-8")}"
+	uri = "http://svl-pgwasdb-d1:9101/pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"?TestSuiteID=${java.net.URLEncoder.encode(testSuite, "UTF-8")}"
         println "uri = ${uri}"	
 	// Add the access group if it is specified
 	if (accessGroup != null) {
-		uri = "${uri}?AccessGroup=${java.net.URLEncoder.encode(accessGroup, "UTF-8")}"
+		uri = "${uri}&AccessGroup=${java.net.URLEncoder.encode(accessGroup, "UTF-8")}"
 	}
 
 	username = findProperty('pegaUsername')
