@@ -135,7 +135,7 @@ void executeModuleScripts(String operation) {
 							echo "uuernt duration puneeth: ${currentBuild.durationString}"
 						    if (currentBuild.result != null) {
                                                     try{
-						    sh 'scp ~/PAD.json pegacoeadm@svl-pgwasda-d1:/PAD.json'
+						    sh "scp ~/PAD.json pegacoeadm@svl-pgwasda-d1:/PAD.json"
 						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus='Waiting%20for%20Admin%20Approval' -PStageName='Unit%20Testing'"
 						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
 						     println "${userInput}"
