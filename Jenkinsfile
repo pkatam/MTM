@@ -151,6 +151,7 @@ void executeModuleScripts(String operation) {
 							 }
 						     }
 						      else{
+						      sh "scp ~/PAD.json pegacoeadm@svl-pgwasda-d1:/PAD.json"
 
 						                      sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Ended' -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
 
