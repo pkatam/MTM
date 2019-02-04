@@ -44,6 +44,8 @@ void executeModuleScripts(String operation) {
             String prod='PROD'
 	    String AppName='applicationName'
 	    String AppVersion='applicationVersion'
+	    String Approval_Status = 'Pending-Approval'
+	    String Dev_Completed = 'Dev-Completed'
 	    def EnvList = []
 	    String a = "${env.JOB_NAME}".split('/')[0] as String
 	    String AppPath= "/home/pegacoeadm/" + "${a}"+".json"
@@ -155,7 +157,7 @@ void executeModuleScripts(String operation) {
 						      sh "exit"
 						      sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
 
-						                      sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Ended' -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
+						                      sh "./gradlew sendUpdateToPega -PbuildStatus=${Dev_Completed} -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
 
 								                      }
 
