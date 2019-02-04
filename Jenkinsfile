@@ -151,8 +151,7 @@ void executeModuleScripts(String operation) {
 							 }
 						     }
 						      else{
-						      sh "ssh pegacoeadm@svl-pgwasda-d1"
-						      sh "mkdir -p ~/${appname}"
+						      sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p ~/${appname}"
 						      sh "exit"
 						      sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
 
