@@ -125,7 +125,7 @@ void executeModuleScripts(String operation) {
 			String PEGA_DEV_2 = "${devastgs}".split('/')[2] as String
 			String PEGA_DEV = "${PEGA_DEV_1}"+"//" + "${PEGA_DEV_2}"+"/"+"pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
 			println "${PEGA_DEV}"
-			 sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Started' -PDateFlag=Start -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DevA%20Started'"
+			 sh "./gradlew sendUpdateToPega -PbuildStatus='Dev-Started' -PDateFlag=Start -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DevA%20Started'"
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
 						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} --debug"
@@ -137,27 +137,33 @@ void executeModuleScripts(String operation) {
 							echo "uuernt duration puneeth: ${currentBuild.durationString}"
 						    if (currentBuild.result != null) {
                                                     try{
-						    sh "scp ~/PAD.json pegacoeadm@svl-pgwasda-d1:/PAD.json"
-						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus='Waiting%20for%20Admin%20Approval' -PStageName='Unit%20Testing'"
+						    sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p ~/${appname}"
+						    sh "exit"
+						    sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
+																				
+						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus= ${Approval_Status} -PStageName='Unit%20Testing'"
 						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
 						     println "${userInput}"
 						     currentBuild.result = "SUCCESS"
-						     buildStatus = "SUCCESS%20UAT%20Failures%20Approved"
+						     buildStatus = "Approved-UT"
 						     sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus} -PStageName='Unit%20Testing'"
 						     println "Took ${currentBuild.startTimeInMillis}"
 						     }catch(err) { // input false
 						         echo "This Job has been Aborted"
                                                          currentBuild.result = 'UNSTABLE'
-							 buildStatus = 'Aborted'
-							 sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus} -PStageName='Unit%20Testing'"
+							 buildStatus = 'Aborted-UT'
+							 String destinationTestPath = "~/${appname}/${TESTRESULTSFILE}"
+
+							 sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${destinationTestPath} -PbuildStatus=${buildStatus} -PStageName='Unit%20Testing'"
 							 }
 						     }
 						      else{
 						      sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p ~/${appname}"
 						      sh "exit"
 						      sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
+						      String destinationTestPath = "~/${appname}/${TESTRESULTSFILE}"
 
-						                      sh "./gradlew sendUpdateToPega -PbuildStatus=${Dev_Completed} -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
+						                      sh "./gradlew sendUpdateToPega -PbuildStatus=${Dev_Completed} -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete' -PtestResultFile=${destinationTestPath}"
 
 								                      }
 
