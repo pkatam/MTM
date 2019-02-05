@@ -169,6 +169,7 @@ task sendUpdateToPega(type: org._10ne.gradle.rest.RestTask) {
 	def appversion = findProperty('pegaAppVersion')
 	def buildStatus = findProperty('buildStatus')
 	def testres = "${testResultFile.toString()}"
+	testres = "${java.net.URLEncoder.encode(testResultFile, "UTF-8")}"
 	def dateflag = findProperty('DateFlag')
 	def stagename = findProperty('StageName')
 	def startdate = findProperty('StartDate')
