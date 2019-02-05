@@ -163,7 +163,7 @@ void executeModuleScripts(String operation) {
 						      sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
 						      String destinationTestPath = "~/${appname}/${TESTRESULTSFILE}"
 
-						                      sh "./gradlew sendUpdateToPega -PbuildStatus=${Dev_Completed} -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete' -PtestResultFile=${destinationTestPath}"
+						                      sh "./gradlew sendUpdateToPega -PbuildStatus=${Dev_Completed} -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
 
 								                      }
 
