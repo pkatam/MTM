@@ -137,7 +137,7 @@ void executeModuleScripts(String operation) {
 							echo "uuernt duration puneeth: ${currentBuild.durationString}"
 						    if (currentBuild.result != null) {
                                                     try{
-						    sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p ~/${appname}"
+						    sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p /var/tmp/CICD/${appname}"
 						    sh "exit"
 						    sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
 																				
