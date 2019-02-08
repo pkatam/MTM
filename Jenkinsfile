@@ -158,9 +158,9 @@ void executeModuleScripts(String operation) {
 							 }
 						     }
 						      else{
-						      sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p ~/${appname}"
+						      sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p /var/tmp/CICD/${appname}"
 						      sh "exit"
-						      sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
+						      sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:/var/tmp/CICD/${appname}/${TESTRESULTSFILE}"
 						      String destinationTestPath = "~/${appname}/${TESTRESULTSFILE}"
 
 						                      sh "./gradlew sendUpdateToPega -PbuildStatus=${Dev_Completed} -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
