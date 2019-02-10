@@ -165,7 +165,7 @@ void executeModuleScripts(String operation) {
 
 						                      sh "./gradlew sendUpdateToPega -PbuildStatus=${Dev_Completed} -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
 								      echo 'Exporting application from Dev environment : ' + env.PEGA_DEV
-								      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -PapplicationName=${appname} -PapplicationVersion=${appversion} --debug"
+								      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -DapplicationName=${appname} -DapplicationVersion=${appversion} -DproductName='DevOps_Export' -DproductVersion='01-01-01' --debug"
 
 								                      }
 
