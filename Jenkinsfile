@@ -174,7 +174,7 @@ void executeModuleScripts(String operation) {
 						     }
 						     if (module == 'SITA') {
 
-                                                      sh "./gradlew performOperation -Dprpc.service.util.action=import -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp --debug" 
+                                                      sh "./gradlew performOperation -Dprpc.service.util.action=import -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dimport.archive.path='http://svl-jbuild-d1:8091/artifactory/Pega_PDM/product/' --debug" 
 
 						     }
 
