@@ -44,10 +44,10 @@ void executeModuleScripts(String operation) {
             String prod='PROD'
 	    String AppName='applicationName'
 	    String AppVersion='applicationVersion'
-	    String Approval_Status = 'Pending-Approval'
-	    String Dev_Completed = 'Dev-Completed'
-	    String productName = 'DevOps_Export'
-	    String productVersion = '01-01-01'
+	    String Approval_Status='Pending-Approval'
+	    String Dev_Completed='Dev-Completed'
+	    String productName='DevOpssExport'
+	    String productVersion='01-01-01'
 	    def EnvList = []
 	    String a = "${env.JOB_NAME}".split('/')[0] as String
 	    String AppPath= "/home/pegacoeadm/" + "${a}"+".json"
@@ -154,7 +154,7 @@ void executeModuleScripts(String operation) {
 						     println "Took ${currentBuild.startTimeInMillis}"
                                                      
 						      echo 'Exporting application from Dev environment : ' + env.PEGA_DEV
-                                                      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dexport.applicationName=${appname} -Dexport.applicationVersion=${appversion} -Dexport.productName='DevOps_Export' -Dexport.productVersion='01-01-01' -Dexport.archiveName='${productName}-${productVersion}.zip' --debug"
+                                                      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dexport.applicationName=${appname} -Dexport.applicationVersion=${appversion} -Dexport.productName='DevOps_Export' -Dexport.productVersion='01-01-01' -Dexport.archiveName='${productName}-${productVersion}-${env.BUILD_NUMBER}.zip' --debug"
 						     }catch(err) { // input false
 						         echo "This Job has been Aborted"
                                                          currentBuild.result = 'UNSTABLE'
