@@ -51,7 +51,7 @@ def artifactVersion = findProperty("artifactVersion") ?:applicationVersion + '_'
 def artifactoryURL = findProperty("artifactoryURL") ?:System.env.ARTIFACTORY_URL
 def artifactorGroup = findProperty("artifactoryGroup") ?:defaultArtifactoryGroup
 def artifactoryRepoKey = "Pega_PDM"
-def productnName = findProperty("productName")
+def productName = findProperty("productName")
 def productVersion = findProperty("productVersion")
 //findProperty("artifactoryRepoKey") ?:defaultArtifactoryRepoKey
 //def archiveName = "${applicationName}_${applicationVersion}"
