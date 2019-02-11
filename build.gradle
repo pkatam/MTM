@@ -54,7 +54,8 @@ def artifactoryRepoKey = "Pega_PDM"
 //findProperty("artifactoryRepoKey") ?:defaultArtifactoryRepoKey
 def archiveName = "${applicationName}_${applicationVersion}"
 def archiveNameWithExt = "${archiveName}.zip"
-def artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/${artifactoryRepoKey}/${artifactorGroup}/${applicationName}/${artifactVersion}/${applicationName}-${applicationVersion}_${buildNumber}.zip"
+//def artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/${artifactoryRepoKey}/${artifactorGroup}/${applicationName}/${artifactVersion}/${applicationName}-${applicationVersion}_${buildNumber}.zip"
+def artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/product/${applicationName}_${artifactVersion}/ExportWizard/${applicationName}-${applicationVersion}_${buildNumber}.zip"
 //def artifactLocation="http://svl-jbuild-d1:8091/artifactory/Pega_PDM/product/DevOps_Export_01-01-01/ExportWizard/TestToday.zip"
 //def artifactLocation = "http://svl-jbuild-d1:8091/artifactory/Pega_PDM/branch/TestDevOps4/ExportWizard/TestDevOps4_20180925T004514_GMT.jar"
 //replace https with http since the download location does not require sign in
@@ -68,8 +69,7 @@ version = artifactVersion
 def exportFolder = ""
 println "BuildDir: ${buildDir}"
 //findProperty("exportFolder")?: FileFinder.insureDirectoryExists("${buildDir}/export")
-def importFolder = ""
-//findProperty("importFolder")?: FileFinder.insureDirectoryExists("${buildDir}/import")
+def importFolder = findProperty("importFolder")?: FileFinder.insureDirectoryExists("${buildDir}/import")
 
 // Define ANT properties for the target defined in prpcServiceUtils
 //ant.properties['export.applicationName'] = applicationName
@@ -192,3 +192,34 @@ task sendUpdateToPega(type: org._10ne.gradle.rest.RestTask) {
 
 
 }
+task fetchFromArtifactory(type: Download) {
+        group 'Pega'
+	description 'Fetch application archive from artifactory'
+	// fetch all files in this folder
+	println "Bence: current files in importfolder:"
+	def list = []
+	def dir = new File(importFolder)
+	dir.eachFileRecurse (FileType.FILES) {
+	file ->
+	                list << file
+	}
+	// print all files in folder
+	list.each {
+	println it.path
+	}
+	doFirst {
+	                println 'First clean out import folder on the Jenkins system' +importFolder
+		        File folder = new File(importFolder)
+		        folder.eachFileRecurse(FileType.FILES) {
+		             file ->
+		             file.delete()
+		                    	                      }
+	        }
+                 println 'Downloading artifact from : ' + artifactLocation
+                 src artifactLocation
+                 username artifactoryUser
+                 password artifactoryPassword
+                 dest importFolder
+	      }
+
+

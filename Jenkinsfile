@@ -165,7 +165,7 @@ void executeModuleScripts(String operation) {
 
 						                      sh "./gradlew sendUpdateToPega -PbuildStatus=${Dev_Completed} -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
 								      echo 'Exporting application from Dev environment : ' + env.PEGA_DEV
-								      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dexport.applicationName=${appname} -Dexport.applicationVersion=${appversion} -Dexport.productName='DevOps_Export' -Dexport.productVersion='01-01-01' -Dexport.archiveName='${appname}.zip' --debug"
+								      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dexport.applicationName=${appname} -Dexport.applicationVersion=${appversion} -Dexport.productName='DevOps_Export' -Dexport.productVersion='01-01-01' -Dexport.archiveName='${applicationName}-${applicationVersion}_${buildNumber}.zip' --debug"
 
 								                      }
 
@@ -174,7 +174,7 @@ void executeModuleScripts(String operation) {
 						     }
 						     if (module == 'SITA') {
 
-                                                      sh "./gradlew performOperation -Dprpc.service.util.action=import -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dimport.archive.path='http://svl-jbuild-d1:8091/artifactory/Pega_PDM/product/' --debug" 
+                                                      sh "./gradlew performOperation -Dprpc.service.util.action=import -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp --debug" 
 
 						     }
 
