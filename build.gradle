@@ -200,6 +200,10 @@ task fetchFromArtifactory(type: Download) {
 	description 'Fetch application archive from artifactory'
 	// fetch all files in this folder
 	println "Bence: current files in importfolder:"
+	 def productname = findProperty('productName')
+	 def productversion = findProperty('productVersion')
+	 archiveName = "${productname}_${productversion}.zip"
+         artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/product/${productname}_${productversion}/ExportWizard/${archiveName}"
 	def list = []
 	def dir = new File(importFolder)
 	dir.eachFileRecurse (FileType.FILES) {
