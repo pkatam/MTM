@@ -181,7 +181,7 @@ void executeModuleScripts(String operation) {
 						     }
 						     if (module == 'SITA') {
 						     echo 'Fetching application archive from Artifactory'
-						     sh  "./gradlew fetchFromArtifactory -PartifactoryUser='pega_admin' -PartifactoryPassword='P@ssw0rd_pega' -PproductName=${productName} -PproductVersion=${prodctVersion}"
+						     sh  "./gradlew fetchFromArtifactory -PartifactoryUser='pega_admin' -PartifactoryPassword='P@ssw0rd_pega' -PproductName=${productName} -PproductVersion=${productVersion}"
 
 
                                                       sh "./gradlew performOperation -Dprpc.service.util.action=import -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp --debug" 
