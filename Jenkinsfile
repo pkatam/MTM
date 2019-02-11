@@ -137,9 +137,11 @@ void executeModuleScripts(String operation) {
 							echo "uuernt duration puneeth: ${currentBuild.durationString}"
 						    if (currentBuild.result != null) {
                                                     try{
-						    sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p /var/tmp/CICD/${appname}"
-						    sh "exit"
-						    sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
+
+
+						    //sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p /var/tmp/CICD/${appname}"
+						    //sh "exit"
+						    //sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
 																				
 						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus= ${Approval_Status} -PStageName='Unit%20Testing'"
 						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
@@ -148,6 +150,9 @@ void executeModuleScripts(String operation) {
 						     buildStatus = "Approved-UT"
 						     sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus} -PStageName='Unit%20Testing'"
 						     println "Took ${currentBuild.startTimeInMillis}"
+                                                     
+						      echo 'Exporting application from Dev environment : ' + env.PEGA_DEV
+                                                      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dexport.applicationName=${appname} -Dexport.applicationVersion=${appversion} -Dexport.productName='DevOps_Export' -Dexport.productVersion='01-01-01' -Dexport.archiveName='${applicationName}-${applicationVersion}_${buildNumber}.zip' --debug"
 						     }catch(err) { // input false
 						         echo "This Job has been Aborted"
                                                          currentBuild.result = 'UNSTABLE'
