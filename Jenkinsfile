@@ -44,7 +44,7 @@ void executeModuleScripts(String operation) {
             String prod='PROD'
 	    String AppName='applicationName'
 	    String AppVersion='applicationVersion'
-	    String Approval_Status = 'Pending-Approval'
+	    String Approval_Status = 'PendingApproval'
 	    String Dev_Completed = 'Dev-Completed'
 	    def EnvList = []
 	    String a = "${env.JOB_NAME}".split('/')[0] as String
