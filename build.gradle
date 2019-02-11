@@ -202,7 +202,7 @@ task fetchFromArtifactory(type: Download) {
 	println "Bence: current files in importfolder:"
 	 def productname = findProperty('productName')
 	 def productversion = findProperty('productVersion')
-	 archiveName = "${productname}_${productversion}.zip"
+	 archiveName = "${productname}-${productversion}-${buildNumber}.zip"
          artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/product/${productname}_${productversion}/ExportWizard/${archiveName}"
 	def list = []
 	def dir = new File(importFolder)
