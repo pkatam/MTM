@@ -44,7 +44,7 @@ void executeModuleScripts(String operation) {
             String prod='PROD'
 	    String AppName='applicationName'
 	    String AppVersion='applicationVersion'
-	    String Approval_Status = 'PendingApproval'
+	    String Approval_Status = 'Pending-Approval'
 	    String Dev_Completed = 'Dev-Completed'
 	    def EnvList = []
 	    String a = "${env.JOB_NAME}".split('/')[0] as String
@@ -139,11 +139,11 @@ void executeModuleScripts(String operation) {
                                                     try{
 
 
-						    //sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p /var/tmp/CICD/${appname}"
-						    //sh "exit"
-						    //sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
+						    sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p /var/tmp/CICD/${appname}"
+						    sh "exit"
+						    sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
 																				
-						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus= ${Approval_Status} -PStageName='Unit%20Testing'"
+						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${Approval_Status} -PStageName='Unit%20Testing'"
 						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
 						     println "${userInput}"
 						     currentBuild.result = "SUCCESS"
