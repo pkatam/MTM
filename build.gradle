@@ -51,8 +51,8 @@ def artifactVersion = findProperty("artifactVersion") ?:applicationVersion + '_'
 def artifactoryURL = findProperty("artifactoryURL") ?:System.env.ARTIFACTORY_URL
 def artifactorGroup = findProperty("artifactoryGroup") ?:defaultArtifactoryGroup
 def artifactoryRepoKey = "Pega_PDM"
-def productName = findProperty("productName")
-def productVersion = findProperty("productVersion")
+def productName
+def productVersion
 //findProperty("artifactoryRepoKey") ?:defaultArtifactoryRepoKey
 //def archiveName = "${applicationName}_${applicationVersion}"
 def archiveName = "${productName}_${productVersion}"
@@ -109,6 +109,8 @@ publishing {
 task executePegaUnitTests(type: org._10ne.gradle.rest.RestTask) {
 	group 'Pega'
 	description 'Execute PegaUnit tests'
+	productName = findProperty('productName')
+	productVersion = findProperty('productVersion')
 	def targetURL = findProperty('targetURL')
 	def accessGroup = findProperty('accessGroup') ?:project.defaultAccessGroup
 	def testSuite = findProperty('testSuite') ? '':project.smokeTestSuite
@@ -200,10 +202,13 @@ task fetchFromArtifactory(type: Download) {
 	description 'Fetch application archive from artifactory'
 	// fetch all files in this folder
 	println "Bence: current files in importfolder:"
-	 def productname = findProperty('productName')
-	 def productversion = findProperty('productVersion')
+	 //def productname = findProperty('productName')
+
+	 //def productversion = findProperty('productVersion')
+	 
 	 archiveName = "${productname}-${productversion}-${buildNumber}.zip"
-         artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/product/${productname}_${productversion}/ExportWizard/${archiveName}"
+         println "Archive Name is : ${archiveName}"
+	 artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/product/${productname}_${productversion}/ExportWizard/${archiveName}"
 	def list = []
 	def dir = new File(importFolder)
 	dir.eachFileRecurse (FileType.FILES) {
