@@ -57,7 +57,8 @@ def productVersion
 //def archiveName = "${applicationName}_${applicationVersion}"
 def archiveName = "${productName}_${productVersion}"
 def archiveNameWithExt = "${archiveName}.zip"
-//def artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/${artifactoryRepoKey}/${artifactorGroup}/${applicationName}/${artifactVersion}/${applicationName}-${applicationVersion}_${buildNumber}.zip"
+def artifactLocation 
+//= findProperty("artifactoryLocation") ?:"${artifactoryURL}/${artifactoryRepoKey}/${artifactorGroup}/${applicationName}/${artifactVersion}/${applicationName}-${applicationVersion}_${buildNumber}.zip"
 //def artifactLocation = findProperty("artifactoryLocation") ?:"${artifactoryURL}/product/${applicationName}_${artifactVersion}/ExportWizard/${archiveName}"
 //def artifactLocation="http://svl-jbuild-d1:8091/artifactory/Pega_PDM/product/DevOps_Export_01-01-01/ExportWizard/TestToday.zip"
 //def artifactLocation = "http://svl-jbuild-d1:8091/artifactory/Pega_PDM/branch/TestDevOps4/ExportWizard/TestDevOps4_20180925T004514_GMT.jar"
