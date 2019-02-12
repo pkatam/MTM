@@ -143,7 +143,7 @@ void executeModuleScripts(String operation) {
 
 						    sh "ssh pegacoeadm@svl-pgwasda-d1 mkdir -p /var/tmp/CICD/${appname}"
 						    sh "exit"
-						    sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:~/${appname}/${TESTRESULTSFILE}"
+						    sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:/var/tmp/CICD/${appname}/${TESTRESULTSFILE}"
 																				
 						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${Approval_Status} -PStageName='Unit%20Testing'"
 						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
