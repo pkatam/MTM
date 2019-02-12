@@ -202,9 +202,9 @@ task fetchFromArtifactory(type: Download) {
 	description 'Fetch application archive from artifactory'
 	// fetch all files in this folder
 	println "Bence: current files in importfolder:"
-	 //def productname = findProperty('productName')
-
-	 //def productversion = findProperty('productVersion')
+	 def productname = findProperty('productName')
+        println "ProductName: ${productName}"
+	 def productversion = findProperty('productVersion')
 	 
 	 archiveName = "${productname}-${productversion}-${buildNumber}.zip"
          println "Archive Name is : ${archiveName}"
