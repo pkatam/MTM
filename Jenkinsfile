@@ -161,6 +161,7 @@ void executeModuleScripts(String operation) {
 							 String destinationTestPath = "~/${appname}/${TESTRESULTSFILE}"
 
 							 sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PbuildStatus=${buildStatus} -PStageName='DevA'"
+							 throw new hudson.AbortException('Aborted!')
 							 }
 						     }
 						      else{
