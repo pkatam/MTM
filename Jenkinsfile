@@ -122,12 +122,11 @@ void executeModuleScripts(String operation) {
 			if (module == 'DevA') {
 
 			//Start of first Stage of pipeline.
-			sh "./gradlew sendUpdateToPega -PbuildStatus='Dev%20Stage%20Started' -PDateFlag=Start -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion}"
 			String PEGA_DEV_1 = "${devastgs}".split('/')[0] as String
 			String PEGA_DEV_2 = "${devastgs}".split('/')[2] as String
 			String PEGA_DEV = "${PEGA_DEV_1}"+"//" + "${PEGA_DEV_2}"+"/"+"pdmodevb/PRRestService/PegaUnit/Rule-Test-Unit-Case/pzExecuteTests"
 			println "${PEGA_DEV}"
-			 sh "./gradlew sendUpdateToPega -PbuildStatus='Dev-Started' -PDateFlag=Start -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DevA%20Started'"
+			 sh "./gradlew sendUpdateToPega -PbuildStatus='Dev-Started' -PDateFlag=Start -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DevA'"
 			                           echo 'Initiating UT...'
 						   withEnv(['TESTRESULTSFILE="TestResult.xml"']) {
 						   sh "./gradlew executePegaUnitTests -PtargetURL=${PEGA_DEV} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PproductName=${productName} -PproductVersion=${productVersion} --debug"
@@ -145,12 +144,12 @@ void executeModuleScripts(String operation) {
 						    sh "exit"
 						    sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:/var/tmp/CICD/${appname}/${TESTRESULTSFILE}"
 																				
-						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${Approval_Status} -PStageName='Unit%20Testing'"
+						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus='Pending-Approval' -PStageName='DevA'"
 						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
 						     println "${userInput}"
 						     currentBuild.result = "SUCCESS"
 						     buildStatus = "Approved-UT"
-						     sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus=${buildStatus} -PStageName='Unit%20Testing'"
+						     sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus='Approved-UT' -PStageName='DevA'"
 						     println "Took ${currentBuild.startTimeInMillis}"
                                                      
 						      echo 'Exporting application from Dev environment : ' + env.PEGA_DEV
@@ -161,7 +160,7 @@ void executeModuleScripts(String operation) {
 							 buildStatus = 'Aborted-UT'
 							 String destinationTestPath = "~/${appname}/${TESTRESULTSFILE}"
 
-							 sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${destinationTestPath} -PbuildStatus=${buildStatus} -PStageName='Unit%20Testing'"
+							 sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${destinationTestPath} -PbuildStatus=${buildStatus} -PStageName='DevA'"
 							 }
 						     }
 						      else{
@@ -170,7 +169,7 @@ void executeModuleScripts(String operation) {
 						      sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:/var/tmp/CICD/${appname}/${TESTRESULTSFILE}"
 						      String destinationTestPath = "~/${appname}/${TESTRESULTSFILE}"
 
-						                      sh "./gradlew sendUpdateToPega -PbuildStatus=${Dev_Completed} -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DEVA%20Complete'"
+						                      sh "./gradlew sendUpdateToPega -PbuildStatus='Dev_Completed' -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DevA'"
 								      echo 'Exporting application from Dev environment : ' + env.PEGA_DEV
 								      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dexport.applicationName=${appname} -Dexport.applicationVersion=${appversion} -Dexport.productName='DevOps_Export' -Dexport.productVersion='01-01-01' -Dexport.archiveName='${applicationName}-${applicationVersion}_${buildNumber}.zip' --debug"
 
@@ -180,11 +179,13 @@ void executeModuleScripts(String operation) {
 						     }
 						     }
 						     if (module == 'SITA') {
+						     sh "./gradlew sendUpdateToPega -PbuildStatus='Sit-Started' -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='SITA'"
 						     echo 'Fetching application archive from Artifactory'
 						     sh  "./gradlew fetchFromArtifactory -PartifactoryUser='pega_admin' -PartifactoryPassword='P@ssw0rd_pega' -PproductName=${productName} -PproductVersion=${productVersion}"
 
 
                                                       sh "./gradlew performOperation -Dprpc.service.util.action=import -Dpega.rest.server.url=${sitastgs}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp --debug" 
+sh "./gradlew sendUpdateToPega -PbuildStatus='Sit-Completed' -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='SITA'"
 
 						     }
 
