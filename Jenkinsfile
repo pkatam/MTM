@@ -71,7 +71,7 @@ void executeModuleScripts(String operation) {
 	    if (devastgs) { 
 	    
 	    	//EnvList.add("${devastgs}")
-		devastgs="http://svl-pgwasdb-d1:9101/pdmodevb"
+		//devastgs="http://svl-pgwasdb-d1:9101/pdmodevb"
 		EnvList.add("DevA")
 	    	}
 
@@ -154,7 +154,7 @@ void executeModuleScripts(String operation) {
 						     println "Took ${currentBuild.startTimeInMillis}"
                                                      
 						      echo 'Exporting application from Dev environment : ' + env.PEGA_DEV
-                                                      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dexport.applicationName=${appname} -Dexport.applicationVersion=${appversion} -Dexport.productName=${productName} -Dexport.productVersion=${productVersion} -Dexport.archiveName='${productName}-${productVersion}-${env.BUILD_NUMBER}.zip' --debug"
+                                                      sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${devastgs}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dexport.applicationName=${appname} -Dexport.applicationVersion=${appversion} -Dexport.productName=${productName} -Dexport.productVersion=${productVersion} -Dexport.archiveName='${productName}-${productVersion}-${env.BUILD_NUMBER}.zip' --debug"
 						     }catch(err) { // input false
 						         echo "This Job has been Aborted"
                                                          currentBuild.result = 'UNSTABLE'
@@ -184,7 +184,7 @@ void executeModuleScripts(String operation) {
 						     sh  "./gradlew fetchFromArtifactory -PartifactoryUser='pega_admin' -PartifactoryPassword='P@ssw0rd_pega' -PproductName=${productName} -PproductVersion=${productVersion}"
 
 
-                                                      sh "./gradlew performOperation -Dprpc.service.util.action=import -Dpega.rest.server.url=${env.PEGA_DEV}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp --debug" 
+                                                      sh "./gradlew performOperation -Dprpc.service.util.action=import -Dpega.rest.server.url=${sitastgs}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp --debug" 
 
 						     }
 
