@@ -144,7 +144,7 @@ void executeModuleScripts(String operation) {
 						    sh "exit"
 						    sh "scp ${WORKSPACE}/${TESTRESULTSFILE} pegacoeadm@svl-pgwasda-d1:/var/tmp/CICD/${appname}/${TESTRESULTSFILE}"
 																				
-						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PpegaUsername=puneeth_dops -PpegaPassword=rules -PtestResultLocation=${WORKSPACE} -PtestResultFile=${TESTRESULTSFILE} -PbuildStatus='Pending-Approval' -PStageName='DevA'"
+						    sh "./gradlew sendUpdateToPega -PtargetURL=${PEGA_DEV} -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PbuildStatus='Pending-Approval' -PStageName='DevA'"
 						     userInput = input(message: 'Unit Tests have failed, would you like to abort the pipeline?')
 						     println "${userInput}"
 						     currentBuild.result = "SUCCESS"
@@ -154,6 +154,7 @@ void executeModuleScripts(String operation) {
                                                      
 						      echo 'Exporting application from Dev environment : ' + env.PEGA_DEV
                                                       sh "./gradlew performOperation -Dprpc.service.util.action=export -Dpega.rest.server.url=${devastgs}/PRRestService -Dpega.rest.username=puneeth_export -Dpega.rest.password=rules -Duser.temp.dir=${WORKSPACE}/tmp -Dexport.applicationName=${appname} -Dexport.applicationVersion=${appversion} -Dexport.productName=${productName} -Dexport.productVersion=${productVersion} -Dexport.archiveName='${productName}-${productVersion}-${env.BUILD_NUMBER}.zip' --debug"
+						      sh "./gradlew sendUpdateToPega -PbuildStatus='Dev_Completed' -PDateFlag=End -PpegaAppName=${appname} -PpegaAppVersion=${appversion} -PStageName='DevA'"
 						     }catch(err) { // input false
 						         echo "This Job has been Aborted"
                                                          currentBuild.result = 'UNSTABLE'
